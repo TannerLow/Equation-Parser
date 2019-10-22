@@ -15,9 +15,11 @@ class Validator
         bool endOfExpr();
         bool terminal(std::string token);
         bool expression1();
+        bool expression2();
         //Variables
         std::vector<std::string> tokens;
         std::vector<std::string>::iterator it;
+        bool empty = true;
 };
 
 #endif // VALIDATOR_H

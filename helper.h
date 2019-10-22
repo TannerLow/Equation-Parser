@@ -31,7 +31,7 @@ namespace helper{
         else if(s == "*") return 13;
         else if(s == "/") return 13;
         else if(s == "%") return 13;
-        else if(s == "^") return 14;
+        else if(s == "^") return 14;//change; should be bitwise OR not exponentiation
         else if(s == "=") return  2;
         else if(s == "+=")return  2;
         else if(s == "-=")return  2;

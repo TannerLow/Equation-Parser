@@ -13,20 +13,33 @@ Validator::Validator(vector<string> Tokens, vector<string>::iterator start){
 }
 
 bool Validator::endOfExpr(){
-    return it == tokens.end();
+    return it >= tokens.end();
 }
 
 bool Validator::terminal(string token){
-    return (*it++ == token);
+    if(*it++ == token) return true;
+    else it--;
+        return false;
 }
 
 bool Validator::expression(){
-    vector<string>::iterator save = it;
-    bool result = terminal("INT_LITERAL") && expression1();
-    return result;
+    return expression1() && expression2();
 }
 
 bool Validator::expression1(){
-    return endOfExpr()
-        || terminal("+") && terminal("INT_LITERAL") && expression1();
+    vector<string>::iterator save = it;
+    if     (it = save, terminal("INT_LITERAL")) return true;
+    else if(it = save, terminal("Identifier"))  return true;
+    else if(it = save, terminal("("))           return expression() && terminal(")");
+    else                                        return false;
+}
+
+bool Validator::expression2(){
+    vector<string>::iterator save = it;
+    if     (it = save, terminal("+")) return expression1() && expression2();
+    else if(it = save, terminal("-")) return expression1() && expression2();
+    else if(it = save, terminal("*")) return expression1() && expression2();
+    else if(it = save, terminal("/")) return expression1() && expression2();
+    else if(it = save, terminal("%")) return expression1() && expression2();
+    else                              return true;
 }

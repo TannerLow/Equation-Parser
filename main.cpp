@@ -11,11 +11,19 @@ using namespace std;
 
 int main(){
     typedef vector<string> vector;
-    //Validator tester
-    vector test{"INT_LITERAL","+","INT_LITERAL"};
-    Validator v(test);
-    cout << v.expression() << endl;
+    //Validator test, check if an expression is valid
+    string test = "123 + (90 *12) +17";
+    vector testTokens = tokenize(test);
+    vector testLexxed = lex(testTokens);
+    for(int i = 0; i < testLexxed.size(); i++)
+        cout << testLexxed[i] << " ";
+    cout << endl;
+    Validator v(testLexxed);
+    cout << ((v.expression()) ? "true" : "false") << endl;
 
+    return 0;
+
+    //helper functions test
     string in;
     while(true){
         //User Input
