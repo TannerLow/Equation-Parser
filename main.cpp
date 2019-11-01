@@ -12,7 +12,7 @@ using namespace std;
 int main(){
     typedef vector<string> vector;
     //Validator test, check if an expression is valid
-    string test = "123 + (90 *12) +17";
+    string test = "t *= 123 + (90 *12)-4 + 10";
     vector testTokens = tokenize(test);
     vector testLexxed = lex(testTokens);
     for(int i = 0; i < testLexxed.size(); i++)

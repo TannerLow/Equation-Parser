@@ -19,27 +19,41 @@ bool Validator::endOfExpr(){
 bool Validator::terminal(string token){
     if(*it++ == token) return true;
     else it--;
-        return false;
+    return false;
 }
 
 bool Validator::expression(){
-    return expression1() && expression2();
+    vector<string>::iterator save = it;
+    return (it = save, expression1() && endOfExpr())
+        || (it = save, terminal("Identifier") && expression4() && endOfExpr());
 }
 
 bool Validator::expression1(){
-    vector<string>::iterator save = it;
-    if     (it = save, terminal("INT_LITERAL")) return true;
-    else if(it = save, terminal("Identifier"))  return true;
-    else if(it = save, terminal("("))           return expression() && terminal(")");
-    else                                        return false;
+    return expression2() && expression3();
 }
 
 bool Validator::expression2(){
-    vector<string>::iterator save = it;
-    if     (it = save, terminal("+")) return expression1() && expression2();
-    else if(it = save, terminal("-")) return expression1() && expression2();
-    else if(it = save, terminal("*")) return expression1() && expression2();
-    else if(it = save, terminal("/")) return expression1() && expression2();
-    else if(it = save, terminal("%")) return expression1() && expression2();
-    else                              return true;
+    if     (terminal("INT_LITERAL")) return true;
+    else if(terminal("Identifier"))  return true;
+    else if(terminal("("))           return expression1() && terminal(")");
+    else                             return false;
+}
+
+bool Validator::expression3(){
+    if     (terminal("+")) return expression1();
+    else if(terminal("-")) return expression1();
+    else if(terminal("*")) return expression1();
+    else if(terminal("/")) return expression1();
+    else if(terminal("%")) return expression1();
+    else                   return true;
+}
+
+bool Validator::expression4(){
+    if     (terminal("=") ) return expression1();
+    else if(terminal("+=")) return expression1();
+    else if(terminal("-=")) return expression1();
+    else if(terminal("*=")) return expression1();
+    else if(terminal("/=")) return expression1();
+    else if(terminal("%=")) return expression1();
+    else                    return false;
 }

@@ -16,6 +16,8 @@ class Validator
         bool terminal(std::string token);
         bool expression1();
         bool expression2();
+        bool expression3();
+        bool expression4();
         //Variables
         std::vector<std::string> tokens;
         std::vector<std::string>::iterator it;
