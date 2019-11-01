@@ -22,7 +22,19 @@ bool Validator::terminal(string token){
     return false;
 }
 
-bool Validator::expression(){
+bool Validator::statement(){
+    vector<string>::iterator save = it;
+    return (it = save, terminal(";"))
+        || (it = save, expression(";"));
+}
+
+bool Validator::expression(string endToken){
+    vector<string>::iterator save = it;
+    return (it = save, expression1() && terminal(endToken))
+        || (it = save, terminal("Identifier") && expression4() && terminal(endToken));
+}
+
+bool Validator::expressionE(){
     vector<string>::iterator save = it;
     return (it = save, expression1() && endOfExpr())
         || (it = save, terminal("Identifier") && expression4() && endOfExpr());

@@ -40,6 +40,7 @@ namespace helper{
         else if(s == "%=")return  2;
         else if(s == "(") return -2;//artificial precedence to
         else if(s == ")") return -2;//work with lex function
+        else if(s == ";") return -2;//artificial
         else              return -1;
     }
 
@@ -107,7 +108,6 @@ namespace helper{
         tokens.push_back(std::string(1,c));
     }
 
-
     //Appends string s to vector of tokens.
     void tokenizeHelper(std::string &current, std::vector<std::string> &tokens, std::string s){
         if(current.size() > 0){
@@ -115,6 +115,14 @@ namespace helper{
             current = "";
         }
         tokens.push_back(s);
+    }
+
+    //Cuts off the current token without adding anything new
+    void tokenizeHelper(std::string &current, std::vector<std::string> &tokens){
+        if(current.size() > 0){
+            tokens.push_back(current);
+            current = "";
+        }
     }
 
     std::string combine(char c, char d){
@@ -178,7 +186,8 @@ namespace helper{
                 case '=': tokenizeHelper(currentToken,tokens,c); break;
                 case '(': tokenizeHelper(currentToken,tokens,c); break;
                 case ')': tokenizeHelper(currentToken,tokens,c); break;
-                case ' ':                                        break;
+                case ';': tokenizeHelper(currentToken,tokens,c); break;
+                case ' ': tokenizeHelper(currentToken,tokens)  ; break;
                 default : currentToken += c;                     break;
                 }
                 i--;//correct iterator if not a multi-char operator

@@ -12,14 +12,14 @@ using namespace std;
 int main(){
     typedef vector<string> vector;
     //Validator test, check if an expression is valid
-    string test = "t *= 123 + (90 *12)-4 + 10";
+    string test = "x *= 123 + (90 *12)-4+ 10;";
     vector testTokens = tokenize(test);
     vector testLexxed = lex(testTokens);
     for(int i = 0; i < testLexxed.size(); i++)
         cout << testLexxed[i] << " ";
     cout << endl;
     Validator v(testLexxed);
-    cout << ((v.expression()) ? "true" : "false") << endl;
+    cout << ((v.statement()) ? "true" : "false") << endl;
 
     return 0;
 
