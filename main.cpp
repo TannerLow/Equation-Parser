@@ -12,9 +12,21 @@ using namespace std;
 int main(){
     typedef vector<string> vector;
     //Validator test, check if an expression is valid
-    string test = "x *= 123 + (90 *12)-4+ 10;";
+        /*"for(i=0;x=0; 1234) x *= 123 - (90 *12)-4+ 10;"
+         *"while(y = 9) x *= 123 + (90 *12)-4+ 10;"
+         *"return this + that* (6+9);"
+         *"{for(i=0;x=0; 1234) x *= 123 - (90 *12)-4+ 10; x = 9;}"*/
+    string test = "{"
+                    "for(i=0;x=0; 1234) x *= 123 - (90 *12)-4+ 10;"
+                    "while(y = 9) x *= 123 + (90 *12)-4+ 10;"
+                    "return this + that* (6+9);"
+                    "{}"
+                  "}";
     vector testTokens = tokenize(test);
     vector testLexxed = lex(testTokens);
+    for(int i = 0; i < testTokens.size(); i++)
+        cout << testTokens[i] << " ";
+    cout << endl;
     for(int i = 0; i < testLexxed.size(); i++)
         cout << testLexxed[i] << " ";
     cout << endl;
@@ -23,7 +35,7 @@ int main(){
 
     return 0;
 
-    //helper functions test
+    //helper functions test : Might no longer work, outdated
     string in;
     while(true){
         //User Input

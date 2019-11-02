@@ -11,11 +11,12 @@ class Validator
         Validator(std::vector<std::string> Tokens);
         Validator(std::vector<std::string> Tokens, std::vector<std::string>::iterator start);
         bool expression(std::string endToken);
-        bool expressionE();
+        bool expression();
         bool statement();
     private:
         bool endOfExpr();
         bool terminal(std::string token);
+        bool statement1();
         bool expression1();
         bool expression2();
         bool expression3();

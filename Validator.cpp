@@ -25,7 +25,21 @@ bool Validator::terminal(string token){
 bool Validator::statement(){
     vector<string>::iterator save = it;
     return (it = save, terminal(";"))
+        || (it = save, terminal("{")     && statement1())
+        || (it = save, terminal("if")    && terminal("(") && expression(")") && statement())
+        || (it = save, terminal("while") && terminal("(") && expression(")") && statement())
+        || (it = save, terminal("for")   && terminal("(") && statement()     && expression(";") && expression(")") && statement())
+        || (it = save, terminal("return")&& expression(";"))
         || (it = save, expression(";"));
+}
+
+bool Validator::statement1(){
+    while(!terminal("}")){
+        if(endOfExpr()) return false;
+        else if(statement());
+        else return false;
+    }
+    return true;
 }
 
 bool Validator::expression(string endToken){
@@ -34,7 +48,7 @@ bool Validator::expression(string endToken){
         || (it = save, terminal("Identifier") && expression4() && terminal(endToken));
 }
 
-bool Validator::expressionE(){
+bool Validator::expression(){
     vector<string>::iterator save = it;
     return (it = save, expression1() && endOfExpr())
         || (it = save, terminal("Identifier") && expression4() && endOfExpr());

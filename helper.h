@@ -4,6 +4,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <set>
 
 namespace helper{
 
@@ -38,9 +39,6 @@ namespace helper{
         else if(s == "*=")return  2;
         else if(s == "/=")return  2;
         else if(s == "%=")return  2;
-        else if(s == "(") return -2;//artificial precedence to
-        else if(s == ")") return -2;//work with lex function
-        else if(s == ";") return -2;//artificial
         else              return -1;
     }
 
@@ -140,7 +138,7 @@ namespace helper{
         std::vector<std::string> tokens;
         std::string currentToken = "";
         bool str_literal = false;
-
+        //For each char in the string
         for(int i = 0; i < s.size(); i++){
             std::string cAndD = "";
             char c = s[i], d;
@@ -169,6 +167,7 @@ namespace helper{
                 d = s[i+1];
                 cAndD = combine(c,d);
             }
+            //detect reserved tokens
             i++;//move iterator in case of 2 char operator
                  if(cAndD == "+=") tokenizeHelper(currentToken,tokens,cAndD);
             else if(cAndD == "-=") tokenizeHelper(currentToken,tokens,cAndD);
@@ -186,6 +185,8 @@ namespace helper{
                 case '=': tokenizeHelper(currentToken,tokens,c); break;
                 case '(': tokenizeHelper(currentToken,tokens,c); break;
                 case ')': tokenizeHelper(currentToken,tokens,c); break;
+                case '{': tokenizeHelper(currentToken,tokens,c); break;
+                case '}': tokenizeHelper(currentToken,tokens,c); break;
                 case ';': tokenizeHelper(currentToken,tokens,c); break;
                 case ' ': tokenizeHelper(currentToken,tokens)  ; break;
                 default : currentToken += c;                     break;
@@ -207,35 +208,47 @@ namespace helper{
      */
     std::vector<std::string> lex(std::vector<std::string> tokens){
         std::vector<std::string> lexxed;
-        enum type {INT_LITERAL,STR_LITERAL, IDENTIFIER, INVALID_TOKEN, UNIDENTIFIED};
-
+        enum type {INT_LITERAL,STR_LITERAL, IDENTIFIER, INVALID_TOKEN, UNIDENTIFIED, KEY_WORD};
+        std::string reservedStrings[] = {"if", "while", "for", "return", ";", "(", ")", "{", "}"};//de-couple later by passing in as parameter
+        std::set<std::string> keywords(reservedStrings, reservedStrings + 9);
+        //for each token in the vector of tokens
         for(int i = 0; i < tokens.size(); i++){
             bool invalid = false, skip = false;
             type current = UNIDENTIFIED;
-            for(int j = 0; j < tokens[i].size(); j++){
-                if(invalid) break; //Token marked as invalid
-                if(skip)    break; //Process can be skipped
-                char c = tokens[i][j];
-                switch(current){
-                case INVALID_TOKEN:
-                    lexxed.push_back("Invalid_Token");
-                    invalid = true;
-                    break;
-                case UNIDENTIFIED:
-                    if     (isNumber(c))   current = INT_LITERAL;
-                    else if(isLetter(c))   current = IDENTIFIER ;
-                    else if(isQuotation(c))current = STR_LITERAL;
-                    break;
-                case INT_LITERAL:
-                    if(!isNumber(c)) current = INVALID_TOKEN;
-                    break;
-                case STR_LITERAL:
-                    //check if ends in quotation mark
-                    if(isQuotation(tokens[i][tokens[i].size()-1])) skip = true;
-                    else current = INVALID_TOKEN;
-                default: break;
+            //check if not a keyword, skips categorization if it is a keyword
+            if(!keywords.count(tokens[i])){
+                //for each character in the token
+                for(int j = 0; j < tokens[i].size(); j++){
+                    if(invalid || skip) break; //Token marked as invalid or process can be skipped
+                    char c = tokens[i][j];
+
+                    //change or maintain the type of token
+                    switch(current){
+                    case INVALID_TOKEN:
+                        lexxed.push_back("Invalid_Token");
+                        invalid = true;
+                        break;
+                    case UNIDENTIFIED:
+                        if     (isNumber(c))   current = INT_LITERAL;
+                        else if(isLetter(c))   current = IDENTIFIER ;
+                        else if(isQuotation(c))current = STR_LITERAL;
+                        break;
+                    case INT_LITERAL:
+                        if(!isNumber(c)) current = INVALID_TOKEN;
+                        break;
+                    case STR_LITERAL:
+                        //check if ends in quotation mark
+                        if(isQuotation(tokens[i][tokens[i].size()-1])) skip = true;
+                        else current = INVALID_TOKEN;
+                    default: break;
+                    }
                 }
             }
+            else{
+                //If it is a keyword, then label it so
+                current = KEY_WORD;
+            }
+            //handle categorized tokens and push to final vector
             switch(current){
             case INVALID_TOKEN:
                 if(!invalid) lexxed.push_back("Invalid_Token");
