@@ -10,9 +10,12 @@ class Validator
     public:
         Validator(std::vector<std::string> Tokens);
         Validator(std::vector<std::string> Tokens, std::vector<std::string>::iterator start);
+        void reset(std::vector<std::string> Tokens);
         bool expression(std::string endToken);
         bool expression();
         bool statement();
+        bool function();
+        bool library();
     private:
         bool endOfExpr();
         bool terminal(std::string token);

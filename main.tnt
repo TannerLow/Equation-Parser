@@ -1,0 +1,12 @@
+z = x + y;
+
+int main(){
+	variable = (400 + 20);
+	variable %= 69;
+	return 0;
+}
+
+void exit()
+{
+	x = 0;
+}

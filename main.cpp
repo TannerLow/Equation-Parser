@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "helper.h"
 #include "Validator.h"
 
@@ -16,11 +18,11 @@ int main(){
          *"while(y = 9) x *= 123 + (90 *12)-4+ 10;"
          *"return this + that* (6+9);"
          *"{for(i=0;x=0; 1234) x *= 123 - (90 *12)-4+ 10; x = 9;}"*/
-    string test = "{"
+    string test = "int main(){"
                     "for(i=0;x=0; 1234) x *= 123 - (90 *12)-4+ 10;"
                     "while(y = 9) x *= 123 + (90 *12)-4+ 10;"
                     "return this + that* (6+9);"
-                    "{}"
+                    "{x + 1; y - 2;}"
                   "}";
     vector testTokens = tokenize(test);
     vector testLexxed = lex(testTokens);
@@ -31,7 +33,23 @@ int main(){
         cout << testLexxed[i] << " ";
     cout << endl;
     Validator v(testLexxed);
-    cout << ((v.statement()) ? "true" : "false") << endl;
+    cout << ((v.library()) ? "true" : "false") << endl;
+
+    cout << endl << endl;
+
+    //Reads text from a file and validates it
+    ifstream srcCode("main.tnt");
+    string code = "", lineBuffer;
+    while(getline(srcCode, lineBuffer))
+        code += lineBuffer;
+    vector codeTokens = tokenize(code);
+    vector codeLexxed = lex(codeTokens);
+    for(int i = 0; i < codeLexxed.size(); i++)
+        cout << codeLexxed[i] << " ";
+    cout << endl;
+    cout << code << endl;
+    Validator v1(codeLexxed);
+    cout << (v1.library() ? "true" : "false") << endl;
 
     return 0;
 

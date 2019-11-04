@@ -12,6 +12,11 @@ Validator::Validator(vector<string> Tokens, vector<string>::iterator start){
     it = start;
 }
 
+void Validator::reset(vector<string> Tokens){
+    tokens = Tokens;
+    it = tokens.begin();
+}
+
 bool Validator::endOfExpr(){
     return it >= tokens.end();
 }
@@ -20,6 +25,18 @@ bool Validator::terminal(string token){
     if(*it++ == token) return true;
     else it--;
     return false;
+}
+
+bool Validator::library(){
+    vector<string>::iterator save = it;
+    return (it = save, function()  && library())
+        || (it = save, statement() && library())
+        || (it = save, endOfExpr());
+}
+
+bool Validator::function(){
+    vector<string>::iterator save = it;
+    return (it = save, terminal("Identifier") && terminal("Identifier") && terminal("(") && terminal(")") && statement());
 }
 
 bool Validator::statement(){

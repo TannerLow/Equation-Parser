@@ -176,20 +176,22 @@ namespace helper{
             else if(cAndD == "%=") tokenizeHelper(currentToken,tokens,cAndD);
             else{
                 switch(c){
-                case '+': tokenizeHelper(currentToken,tokens,c); break;
-                case '-': tokenizeHelper(currentToken,tokens,c); break;
-                case '*': tokenizeHelper(currentToken,tokens,c); break;
-                case '/': tokenizeHelper(currentToken,tokens,c); break;
-                case '%': tokenizeHelper(currentToken,tokens,c); break;
-                case '^': tokenizeHelper(currentToken,tokens,c); break;
-                case '=': tokenizeHelper(currentToken,tokens,c); break;
-                case '(': tokenizeHelper(currentToken,tokens,c); break;
-                case ')': tokenizeHelper(currentToken,tokens,c); break;
-                case '{': tokenizeHelper(currentToken,tokens,c); break;
-                case '}': tokenizeHelper(currentToken,tokens,c); break;
-                case ';': tokenizeHelper(currentToken,tokens,c); break;
-                case ' ': tokenizeHelper(currentToken,tokens)  ; break;
-                default : currentToken += c;                     break;
+                case '+' : tokenizeHelper(currentToken,tokens,c); break;
+                case '-' : tokenizeHelper(currentToken,tokens,c); break;
+                case '*' : tokenizeHelper(currentToken,tokens,c); break;
+                case '/' : tokenizeHelper(currentToken,tokens,c); break;
+                case '%' : tokenizeHelper(currentToken,tokens,c); break;
+                case '^' : tokenizeHelper(currentToken,tokens,c); break;
+                case '=' : tokenizeHelper(currentToken,tokens,c); break;
+                case '(' : tokenizeHelper(currentToken,tokens,c); break;
+                case ')' : tokenizeHelper(currentToken,tokens,c); break;
+                case '{' : tokenizeHelper(currentToken,tokens,c); break;
+                case '}' : tokenizeHelper(currentToken,tokens,c); break;
+                case ';' : tokenizeHelper(currentToken,tokens,c); break;
+                case ' ' : tokenizeHelper(currentToken,tokens)  ; break;
+                case '\n':                                        break;
+                case '\t':                                        break;
+                default  : currentToken += c;                     break;
                 }
                 i--;//correct iterator if not a multi-char operator
             }
